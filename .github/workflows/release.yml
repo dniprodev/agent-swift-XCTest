@@ -38,12 +38,12 @@ jobs:
       - name: Checkout repository
       - uses: actions/checkout@v4
   
-      # - name: Setup git credentials
-      #   uses: oleksiyrudenko/gha-git-credentials@v2.1.1
-      #   with:
-      #     name: 'reportportal.io'
-      #     email: 'support@reportportal.io'
-      #     token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Setup git credentials
+        uses: oleksiyrudenko/gha-git-credentials@v2.1.1
+        with:
+          name: 'reportportal.io'
+          email: 'support@reportportal.io'
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Generate versions
         run: |
