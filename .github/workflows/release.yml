@@ -56,7 +56,7 @@ jobs:
         run: |
           sed '/\[Unreleased\]/q' ${{ env.CHANGE_LOG_FILE }} >> ${{ env.CHANGE_LOG_TMP_FILE }}
           sed -E '1,/#?#\s*\[Unreleased\]/d' ${{ env.CHANGE_LOG_FILE }} | sed -E '/#?#\s*\[/q' | \
-          { echo -e '\n## [${{steps.get_version.outputs.version}}]'; sed '$d'; } >> ${{ env.CHANGE_LOG_TMP_FILE }}
+          { echo -e '\n## [${{steps.getVersion.outputs.version}}]'; sed '$d'; } >> ${{ env.CHANGE_LOG_TMP_FILE }}
           grep -E '#?#\s*\[[0-9]' ${{ env.CHANGE_LOG_FILE }} | head -n1 >> ${{ env.CHANGE_LOG_TMP_FILE }}
           sed -E '1,/#?#\s*\[[0-9]/d' ${{ env.CHANGE_LOG_FILE }} >> ${{ env.CHANGE_LOG_TMP_FILE }}
           rm ${{ env.CHANGE_LOG_FILE }}
@@ -69,15 +69,15 @@ jobs:
         id: readChangelogEntry
         uses: mindsers/changelog-reader-action@v2
         with:
-          version: ${{ steps.get_version.outputs.version }}
+          version: ${{ steps.getVersion.outputs.version }}
           path: ./${{ env.CHANGE_LOG_FILE }}
 
       - name: Create Release
         id: createRelease
         uses: ncipollo/release-action@v1
         with:
-          tag: ${{ steps.get_version.outputs.version }}
-          name: Release ${{ steps.get_version.outputs.version }}
+          tag: ${{ steps.getVersion.outputs.version }}
+          name: Release ${{ steps.getVersion.outputs.version }}
           body: ${{ steps.readChangelogEntry.outputs.changes }}
           
       - name: Setup
