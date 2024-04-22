@@ -10,7 +10,10 @@ Pod::Spec.new do |s|
     s.homepage         = 'https://github.com/dniprodev/agent-swift-XCTest'
     s.license          = { :type => 'MIT', :file => 'LICENSE' }
     s.author           = { 'DarthRumata' => 'sag.dnepr@gmail.com' }
-    s.source           = { :git => 'https://github.com/dniprodev/agent-swift-XCTest/AYForkOfReportPortalAgent.git', :tag => s.version.to_s }
+    s.source           = { 
+        :git => 'https://github.com/dniprodev/agent-swift-XCTest.git',
+        :tag => s.version
+    }
 
     s.ios.deployment_target = '10.3'
     s.tvos.deployment_target = '10.3'
