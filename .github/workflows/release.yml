@@ -37,7 +37,7 @@ jobs:
   
     steps:
       - name: Checkout repository
-      - uses: actions/checkout@v4
+        uses: actions/checkout@v4
   
       - name: Setup git credentials
         uses: oleksiyrudenko/gha-git-credentials@v2.1.1
