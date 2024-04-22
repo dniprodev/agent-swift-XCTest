@@ -9,8 +9,28 @@ on:
     branches: [ "develop", "main" ]
 
 jobs:
+  lint-pods:
+    name: Lint Cocoapods
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.7
+      - name: Install dependencies
+        run: |
+          gem install cocoapods -v '1.10.1'
+
+      - name: Lint Pod
+        run: |
+          pod lib lint  
+
   build:
-    name: Build and Test default scheme using any available iPhone simulator
+    name: Build default scheme using any available iPhone simulator
     runs-on: macos-latest
 
     steps:
