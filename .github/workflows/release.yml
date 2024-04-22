@@ -49,7 +49,7 @@ jobs:
       - name: Generate versions
         run: |
           VERSION=$(grep 's.version' ${PODSPEC_FILE} | head -1 | sed "s/.*'\(.*\)'.*/\1/")
-          echo "::set-output name=version::${VERSION}"
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
   
       - name: Update CHANGELOG.md
         run: |
