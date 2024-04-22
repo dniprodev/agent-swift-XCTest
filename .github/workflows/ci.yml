@@ -28,7 +28,7 @@ jobs:
           ruby-version: 2.7
       - name: Install dependencies
         run: |
-          gem install cocoapods -v '1.10.1'
+          gem install cocoapods -v '1.14.3'
 
       - name: Lint Pod
         run: |
