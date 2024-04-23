@@ -52,23 +52,22 @@ jobs:
           VERSION=$(grep 's.version' ${PODSPEC_FILE} | head -1 | sed "s/.*'\(.*\)'.*/\1/")
           echo "version=${VERSION}" >> $GITHUB_OUTPUT
   
-      # - name: Update CHANGELOG.md
-      #   run: |
-      #     sed '/\[Unreleased\]/q' ${{ env.CHANGE_LOG_FILE }} >> ${{ env.CHANGE_LOG_TMP_FILE }}
-      #     sed -E '1,/#?#\s*\[Unreleased\]/d' ${{ env.CHANGE_LOG_FILE }} | sed -E '/#?#\s*\[/q' | \
-      #     { echo -e '\n## [${{steps.getVersion.outputs.version}}]'; sed '$d'; } >> ${{ env.CHANGE_LOG_TMP_FILE }}
-      #     grep -E '#?#\s*\[[0-9]' ${{ env.CHANGE_LOG_FILE }} | head -n1 >> ${{ env.CHANGE_LOG_TMP_FILE }}
-      #     sed -E '1,/#?#\s*\[[0-9]/d' ${{ env.CHANGE_LOG_FILE }} >> ${{ env.CHANGE_LOG_TMP_FILE }}
-      #     rm ${{ env.CHANGE_LOG_FILE }}
-      #     mv ${{ env.CHANGE_LOG_TMP_FILE }} ${{ env.CHANGE_LOG_FILE }}
-      #     git add ${{ env.CHANGE_LOG_FILE }}
-      #     git commit -m "Changelog update"
-      #     git push
+      - name: Update CHANGELOG.md
+        run: |
+          sed '/## \[Unreleased\]/q' ${{ env.CHANGE_LOG_FILE }} > ${{ env.CHANGE_LOG_TMP_FILE }}
+          echo -e "\n## [${{ steps.getVersion.outputs.version }}] - $(date +"%Y-%m-%d")\n" >> ${{ env.CHANGE_LOG_TMP_FILE }}
+          sed -n -e '/## \[Unreleased\]/,/## \[/p' ${{ env.CHANGE_LOG_FILE }} | sed '1d; $d' >> ${{ env.CHANGE_LOG_TMP_FILE }}
+          sed -n -e '/## \[/,$p' ${{ env.CHANGE_LOG_FILE }} >> ${{ env.CHANGE_LOG_TMP_FILE }}
+          rm ${{ env.CHANGE_LOG_FILE }}
+          mv ${{ env.CHANGE_LOG_TMP_FILE }} ${{ env.CHANGE_LOG_FILE }}
+          git add ${{ env.CHANGE_LOG_FILE }}
+          git commit -m "Changelog update"
+          git push
 
-      - name: Update changelog
-        uses: thomaseizinger/keep-a-changelog-new-release@v2
-        with:
-          tag: ${{steps.getVersion.outputs.version}}
+      # - name: Update changelog
+      #   uses: thomaseizinger/keep-a-changelog-new-release@v2
+      #   with:
+      #     tag: ${{steps.getVersion.outputs.version}}
 
       - name: Read changelog Entry
         id: readChangelogEntry
