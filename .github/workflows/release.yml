@@ -77,7 +77,7 @@ jobs:
           name: Release ${{ steps.getVersion.outputs.version }}
           body: ${{ steps.readChangelogEntry.outputs.changes }}
           
-      - name: Setup
+      - name: Setup build enviroment
         uses: ./.github/actions/setup-build-env
   
       - name: Publish to CocoaPod trunk
