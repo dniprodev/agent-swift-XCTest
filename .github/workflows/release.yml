@@ -35,58 +35,58 @@ jobs:
     runs-on: macOS-latest
   
     steps:
-      # - name: Checkout repository
-      #   uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
   
-      # - name: Setup git credentials
-      #   uses: oleksiyrudenko/gha-git-credentials@v2.1.1
-      #   with:
-      #     name: 'reportportal.io'
-      #     email: 'support@reportportal.io'
-      #     token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Setup git credentials
+        uses: oleksiyrudenko/gha-git-credentials@v2.1.1
+        with:
+          name: 'reportportal.io'
+          email: 'support@reportportal.io'
+          token: ${{ secrets.GITHUB_TOKEN }}
 
-      # - name: Generate versions
-      #   id: getVersion
-      #   run: |
-      #     VERSION=$(grep 's.version' ${PODSPEC_FILE} | head -1 | sed "s/.*'\(.*\)'.*/\1/")
-      #     echo "version=${VERSION}" >> $GITHUB_OUTPUT
+      - name: Generate versions
+        id: getVersion
+        run: |
+          VERSION=$(grep 's.version' ${PODSPEC_FILE} | head -1 | sed "s/.*'\(.*\)'.*/\1/")
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
   
-      # - name: Update CHANGELOG.md
-      #   run: |
-      #     sed -i '' -e "s/## \[Unreleased\]/## [${{ steps.getVersion.outputs.version }}] - $(date +"%Y-%m-%d")/g" ${{ env.CHANGE_LOG_FILE }}
-      #     sed -i '' '1 a\
-      #     \
-      #     ## [Unreleased]
-      #     ' ${{ env.CHANGE_LOG_FILE }}
-      #     git add ${{ env.CHANGE_LOG_FILE }}
-      #     git commit -m "Changelog update"
-      #     git push
+      - name: Update CHANGELOG.md
+        run: |
+          sed -i '' -e "s/## \[Unreleased\]/## [${{ steps.getVersion.outputs.version }}] - $(date +"%Y-%m-%d")/g" ${{ env.CHANGE_LOG_FILE }}
+          sed -i '' '1 a\
+          \
+          ## [Unreleased]
+          ' ${{ env.CHANGE_LOG_FILE }}
+          git add ${{ env.CHANGE_LOG_FILE }}
+          git commit -m "Changelog update"
+          git push
           
-      # - name: Read changelog Entry
-      #   id: readChangelogEntry
-      #   uses: mindsers/changelog-reader-action@v2
-      #   with:
-      #     version: ${{ steps.getVersion.outputs.version }}
-      #     path: ./${{ env.CHANGE_LOG_FILE }}
+      - name: Read changelog Entry
+        id: readChangelogEntry
+        uses: mindsers/changelog-reader-action@v2
+        with:
+          version: ${{ steps.getVersion.outputs.version }}
+          path: ./${{ env.CHANGE_LOG_FILE }}
 
-      # - name: Create Release
-      #   id: createRelease
-      #   uses: ncipollo/release-action@v1
-      #   with:
-      #     tag: ${{ steps.getVersion.outputs.version }}
-      #     name: Release ${{ steps.getVersion.outputs.version }}
-      #     body: ${{ steps.readChangelogEntry.outputs.changes }}
+      - name: Create Release
+        id: createRelease
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ steps.getVersion.outputs.version }}
+          name: Release ${{ steps.getVersion.outputs.version }}
+          body: ${{ steps.readChangelogEntry.outputs.changes }}
           
-      # - name: Setup
-      #   uses: ./.github/actions/setup-build-env
+      - name: Setup
+        uses: ./.github/actions/setup-build-env
   
-      # - name: Publish to CocoaPod trunk
-      #   run: pod trunk push --allow-warnings ${{ env.PODSPEC_FILE }}
-      #   env:
-      #     COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
+      - name: Publish to CocoaPod trunk
+        run: pod trunk push --allow-warnings ${{ env.PODSPEC_FILE }}
+        env:
+          COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
 
       - name: Checkout develop branch
-        if: ${{ github.ref }} == ${{ env.RELEASE_BRANCH }}
+        if: ${{ github.ref == env.RELEASE_BRANCH }}
         uses: actions/checkout@v4
         with:
           ref: ${{ env.DEVELOP_BRANCH }}
