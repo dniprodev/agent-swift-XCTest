@@ -1,8 +1,6 @@
 # Changelog
 
-[Unreleased]
-
-## 2.4.1 - 2024-04-23
+## [Unreleased]
 ### Added
 - Client version updated
 
