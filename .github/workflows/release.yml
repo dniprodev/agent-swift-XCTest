@@ -86,7 +86,7 @@ jobs:
       #     COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
 
       - name: Checkout develop branch
-        if: ${{ github.ref }} == ${{ env.RELEASE_BRANCH }}
+        # if: ${{ github.ref }} == ${{ env.RELEASE_BRANCH }}
         uses: actions/checkout@v4
         with:
           ref: ${{ env.DEVELOP_BRANCH }}
