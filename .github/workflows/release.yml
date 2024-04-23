@@ -55,8 +55,8 @@ jobs:
       - name: Update CHANGELOG.md
         run: |
           sed -i '' -e "s/## \[Unreleased\]/## [${{ steps.getVersion.outputs.version }}] - $(date +"%Y-%m-%d")/g" ${{ env.CHANGE_LOG_FILE }}
-          sed -i '' '1 a\\
-          \\
+          sed -i '' '1 a\
+          \
           ## [Unreleased]
           ' ${{ env.CHANGE_LOG_FILE }}
           git add ${{ env.CHANGE_LOG_FILE }}
