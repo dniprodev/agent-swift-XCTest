@@ -56,17 +56,11 @@ jobs:
         run: |
           sed -i '' -e "s/## \[Unreleased\]/## ${{ steps.getVersion.outputs.version }} - $(date +"%Y-%m-%d")/g" ${{ env.CHANGE_LOG_FILE }} && sed -i '' '1 a\
           \
-          ## [Unreleased]
+          [Unreleased]
           ' ${{ env.CHANGE_LOG_FILE }}
-          # sed '/## \[Unreleased\]/q' ${{ env.CHANGE_LOG_FILE }} > ${{ env.CHANGE_LOG_TMP_FILE }}
-          # echo -e "\n## [${{ steps.getVersion.outputs.version }}] - $(date +"%Y-%m-%d")\n" >> ${{ env.CHANGE_LOG_TMP_FILE }}
-          # sed -n -e '/## \[Unreleased\]/,/## \[/p' ${{ env.CHANGE_LOG_FILE }} | sed '1d; $d' >> ${{ env.CHANGE_LOG_TMP_FILE }}
-          # sed -n -e '/## \[/,$p' ${{ env.CHANGE_LOG_FILE }} >> ${{ env.CHANGE_LOG_TMP_FILE }}
-          # rm ${{ env.CHANGE_LOG_FILE }}
-          # mv ${{ env.CHANGE_LOG_TMP_FILE }} ${{ env.CHANGE_LOG_FILE }}
-          # git add ${{ env.CHANGE_LOG_FILE }}
-          # git commit -m "Changelog update"
-          # git push
+          git add ${{ env.CHANGE_LOG_FILE }}
+          git commit -m "Changelog update"
+          git push
 
       # - name: Update changelog
       #   uses: thomaseizinger/keep-a-changelog-new-release@v2
