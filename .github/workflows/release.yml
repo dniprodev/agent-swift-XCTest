@@ -42,6 +42,17 @@ jobs:
           tags: true
         
   
+      - name: Checkout develop branch
+        if: ${{ github.ref == format('refs/heads/{0}', env.RELEASE_BRANCH) }}
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.DEVELOP_BRANCH }}
+          fetch-depth: 0
+
+      - name: Exit
+        run: |
+          exit 1
+
       - name: Setup git credentials
         uses: oleksiyrudenko/gha-git-credentials@v2.1.1
         with:
@@ -97,7 +108,7 @@ jobs:
           COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
 
       - name: Checkout develop branch
-        if: ${{ github.ref == env.RELEASE_BRANCH }}
+        if: ${{ github.ref == format('refs/heads/{0}', env.RELEASE_BRANCH) }}
         uses: actions/checkout@v4
         with:
           ref: ${{ env.DEVELOP_BRANCH }}
