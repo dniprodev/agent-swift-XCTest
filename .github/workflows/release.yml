@@ -37,6 +37,10 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          tags: true
+        
   
       - name: Setup git credentials
         uses: oleksiyrudenko/gha-git-credentials@v2.1.1
@@ -53,7 +57,7 @@ jobs:
   
       - name: Check if version already exists as a tag
         run: |
-          if git tag --list | grep -q "^${{ steps.getVersion.outputs.version }}$"; then
+          if git tag --list | grep -qw "^${{ steps.getVersion.outputs.version }}$"; then
             echo "This version tag already exists!"
             exit 1
           fi
