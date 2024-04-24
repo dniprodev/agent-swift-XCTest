@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name             = 'AYForkOfReportPortalAgent'
-    s.version          = '2.4.1'
+    s.version          = ENV['LIB_VERSION']
     s.summary          = 'Test Agent to push test results on Report Portal'
 
     s.description      = <<-DESC
