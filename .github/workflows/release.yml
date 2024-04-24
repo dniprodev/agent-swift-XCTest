@@ -49,7 +49,7 @@ jobs:
           email: 'support@reportportal.io'
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Generate versions
+      - name: Get versions
         id: getVersion
         run: |
           VERSION=$(grep 's.version' ${PODSPEC_FILE} | head -1 | sed "s/.*'\(.*\)'.*/\1/")
