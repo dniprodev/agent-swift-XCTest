@@ -35,13 +35,31 @@ jobs:
     runs-on: macOS-latest
   
     steps:
+      - name: Checkout develop branch
+        if: ${{ github.ref == format('refs/heads/{0}', env.RELEASE_BRANCH) }}
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.DEVELOP_BRANCH }}
+          fetch-depth: 0
+
+      - name: Merge release branch into develop
+        if: ${{ github.ref == format('refs/heads/{0}', env.RELEASE_BRANCH) }}
+        run: |
+          git merge -m 'Merge release branch into develop after a release' origin/${{ env.RELEASE_BRANCH }}
+          git status | (! grep -Fq 'both modified:') || git status | grep -F 'both modified:' \
+          | { echo -e 'Unable to merge release into develop, merge conflicts:'; (! grep -Eo '[^ ]+$') }
+          git push origin ${{ env.DEVELOP_BRANCH }}
+
+      - name: Exit
+        run: |
+          exit 1
+
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
           tags: true
         
-  
       - name: Setup git credentials
         uses: oleksiyrudenko/gha-git-credentials@v2.1.1
         with:
@@ -97,14 +115,14 @@ jobs:
           COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
 
       - name: Checkout develop branch
-        if: ${{ github.ref == env.RELEASE_BRANCH }}
+        if: ${{ github.ref == format('refs/heads/{0}', env.RELEASE_BRANCH) }}
         uses: actions/checkout@v4
         with:
           ref: ${{ env.DEVELOP_BRANCH }}
           fetch-depth: 0
 
       - name: Merge release branch into develop
-        if: ${{ github.ref == env.RELEASE_BRANCH }}
+        if: ${{ github.ref == format('refs/heads/{0}', env.RELEASE_BRANCH) }}
         run: |
           git merge -m 'Merge release branch into develop after a release' origin/${{ env.RELEASE_BRANCH }}
           git status | (! grep -Fq 'both modified:') || git status | grep -F 'both modified:' \
