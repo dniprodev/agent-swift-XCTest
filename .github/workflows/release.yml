@@ -24,7 +24,6 @@ on:
       - CHANGELOG.md
 
 env:
-  PODSPEC_FILE: AYForkOfReportPortalAgent.podspec
   CHANGE_LOG_FILE: CHANGELOG.md
   RELEASE_BRANCH: main
   DEVELOP_BRANCH: develop
@@ -48,7 +47,10 @@ jobs:
       - name: Generate versions
         id: getVersion
         run: |
-          VERSION=$(grep 's.version' ${PODSPEC_FILE} | head -1 | sed "s/.*'\(.*\)'.*/\1/")
+          VERSION=$(git describe --tags `git rev-list --tags --max-count=1`)
+          export POD_VERSION=${VERSION}
+          echo "!!!!"
+          echo ${VERSION}
           echo "version=${VERSION}" >> $GITHUB_OUTPUT
   
       - name: Update CHANGELOG.md
@@ -81,7 +83,7 @@ jobs:
         uses: ./.github/actions/setup-build-env
   
       - name: Publish to CocoaPod trunk
-        run: pod trunk push --allow-warnings ${{ env.PODSPEC_FILE }}
+        run: pod trunk push --allow-warnings
         env:
           COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
 
